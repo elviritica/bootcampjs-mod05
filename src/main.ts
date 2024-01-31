@@ -1,104 +1,131 @@
-function generarRandom () : number{
-    return Math.floor(Math.random() * 101);
+let puntuacionUsuario = 0;
+
+const AS = 1;
+const DOS = 2;
+const TRES = 3;
+const CUATRO = 4;
+const CINCO = 5;
+const SEIS = 6;
+const SIETE = 7;
+const SOTA = 10;
+const CABALLO = 11;
+const REY = 12;
+
+
+function muestraPuntuacion () {
+    const puntuacion = document.getElementById("puntuacion");
+    if (puntuacion && puntuacion instanceof HTMLDivElement) {
+        puntuacion.innerHTML = puntuacionUsuario.toString();
+    } 
 }
 
-const numParaAcertar : number = generarRandom();
+document.addEventListener("DOMContentLoaded", muestraPuntuacion);
 
-type Estado = 
-    | "NO_ES_UN_NUMERO"
-    | "EL_NUM_SECRETO_ES_MAYOR"
-    | "EL_NUM_SECRETO_ES_MENOR"
-    | "SI_ES_EL_NUM_SECRETO"
-    | "GAME_OVER";
-
-
-const MAX_INTENTOS : number = 5;
-let numIntentos : number = 0;
-
-function hasSuperadoNumIntentos () : boolean{
-    return numIntentos >= MAX_INTENTOS;
+function generarNumRandom (min : number, max : number) : number{
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function mostrarIntentos (){
-    let numeroIntentos = document.getElementById("intentos");
-    if(numeroIntentos){
-        numeroIntentos.innerHTML = `${numIntentos} de ${MAX_INTENTOS}`;
-    }      
+
+function dameCarta(){
+    let num = generarNumRandom(1,10);
+    let carta = 0;
+
+    if (num > 7) {
+        carta = num + 2;
+    } else {
+        carta = num;
+    }
+
+    return carta;
 }
 
-document.addEventListener("DOMContentLoaded", mostrarIntentos);
 
-function gestionarGameOver(estado : Estado){
-    if(estado === "GAME_OVER"){
-        const botonComprobar = document.getElementById("comprobar") as HTMLButtonElement;
+function muestraCarta(carta : number){
+    let imagen = "";
+    
+    switch(carta){
+        case AS:
+            carta = 1,
+            imagen = "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/1_as-copas.jpg"
+            break;
+        case DOS:
+            imagen = "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/2_dos-copas.jpg",
+            carta = 2
+            break;
+        case TRES:
+            imagen = "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/3_tres-copas.jpg",
+            carta = 3
+            break;
+        case CUATRO:
+            imagen = "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/4_cuatro-copas.jpg",
+            carta = 4
+            break;
+        case CINCO:
+            imagen = "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/5_cinco-copas.jpg",
+            carta = 5
+            break;
+        case SEIS:
+            imagen = "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/6_seis-copas.jpg",
+            carta = 6
+            carta;
+        case SIETE:
+            imagen = "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/7_siete-copas.jpg",
+            carta = 7
+            break;
+        case SOTA:
+            imagen = "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/10_sota-copas.jpg",
+            carta = 10
+            break;
+        case CABALLO:
+            imagen = "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/11_caballo-copas.jpg",
+            carta = 11
+            break;
+        case REY:
+            imagen = "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/12_rey-copas.jpg",
+            carta = 12
+            break;
+    }
 
-        if(botonComprobar){
-            botonComprobar.disabled = true;
+    let imagenCarta = document.getElementById("carta");
+    if(imagenCarta && imagenCarta instanceof HTMLImageElement){
+        imagenCarta.src = imagen;
+    }
+
+}
+
+function sumarCartas(carta:number, puntuacionUsuario: number){
+    if(carta < 10){
+        puntuacionUsuario += carta;
+    } else {
+        puntuacionUsuario += 0.5;
+    }
+    return puntuacionUsuario;
+}
+
+function gameOver(puntuacionUsuario : number){
+    if(puntuacionUsuario > 7.5){
+        const puntuacion = document.getElementById("puntuacion");
+        if (puntuacion && puntuacion instanceof HTMLDivElement) {
+            puntuacion.innerHTML = "Has perdido";
+        } 
+        const botonPedir = document.getElementById("dameCarta");
+        if(botonPedir && botonPedir instanceof HTMLButtonElement){
+            botonPedir.disabled = true;
         }
     }
 }
 
-function muestraMensajeComprobacion(input : string, estado : Estado){
-    let mensaje = "";
-    switch(estado){
-        case "NO_ES_UN_NUMERO":
-            mensaje = "No es un número, prueba de nuevo"
-            break;
-        case "EL_NUM_SECRETO_ES_MAYOR":
-            mensaje = `El número secreto es MAYOR que ${input}, prueba de nuevo`
-            break;
-        case "EL_NUM_SECRETO_ES_MENOR":
-            mensaje = `El número secreto es MENOR que ${input}, prueba de nuevo`
-            break;
-        case "SI_ES_EL_NUM_SECRETO":
-            mensaje = "Has acertado"
-            break;
-        case "GAME_OVER":
-            mensaje = "GAME OVER, has perdido"
-            break;
-        default: "No sé qué ha pasado, pero no deberías estar aquí";
-    }
-
-    let resultado = document.getElementById("resultado") as HTMLDivElement;
-    if (resultado) {
-       resultado.innerHTML = mensaje;
-    }
-
+function handleClick(){
+    let carta = dameCarta();
+    console.log(carta); // Comprobacion carta
+    muestraCarta(carta);
+    puntuacionUsuario = sumarCartas(carta, puntuacionUsuario);
+    muestraPuntuacion();
+    gameOver(puntuacionUsuario);
+    
 }
 
-function comprobarNumero(input : string) : Estado{
-    const numero = parseInt(input);
-    const esUnNum = !isNaN(numero);
-    
-    if(!esUnNum) {
-        return "NO_ES_UN_NUMERO";
-    } 
-    if (numero === numParaAcertar) {
-        return "SI_ES_EL_NUM_SECRETO";
-    } 
-    if(hasSuperadoNumIntentos()){
-        return "GAME_OVER";
-    }
-    numIntentos++;
-    mostrarIntentos();
-    return numero > numParaAcertar
-    ? "EL_NUM_SECRETO_ES_MENOR"
-    : "EL_NUM_SECRETO_ES_MAYOR";
-};
-
-function handleCompruebaClick(){
-    let texto : string = "";
-    const input = document.getElementById("numero");
-    if(input && input instanceof HTMLInputElement){
-        texto = input.value;
-    }
-    const estado : Estado = comprobarNumero(texto);
-    muestraMensajeComprobacion(texto, estado);
-    gestionarGameOver(estado);
-};
-
-const botonComprobar = document.getElementById("comprobar");
-
-if(botonComprobar && botonComprobar instanceof HTMLButtonElement){
-    botonComprobar.addEventListener("click", handleCompruebaClick);
+const botonPedir = document.getElementById("dameCarta");
+if(botonPedir && botonPedir instanceof HTMLButtonElement){
+    botonPedir.addEventListener("click", handleClick);
 }
