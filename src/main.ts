@@ -21,6 +21,13 @@ function muestraPuntuacion () {
 
 document.addEventListener("DOMContentLoaded", muestraPuntuacion);
 
+document.addEventListener("DOMContentLoaded", ()=> {
+    const botonReiniciar = document.getElementById("reiniciar");
+    if (botonReiniciar && botonReiniciar instanceof HTMLButtonElement) {
+        botonReiniciar.disabled = true;
+    }
+});
+
 function generarNumRandom (min : number, max : number) : number{
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -112,20 +119,82 @@ function gameOver(puntuacionUsuario : number){
         if(botonPedir && botonPedir instanceof HTMLButtonElement){
             botonPedir.disabled = true;
         }
+        const botonMePlanto = document.getElementById("mePlanto");
+        if(botonMePlanto && botonMePlanto instanceof HTMLButtonElement){
+            botonMePlanto.disabled = true;
+        }
+        const botonReiniciar = document.getElementById("reiniciar");
+        if (botonReiniciar && botonReiniciar instanceof HTMLButtonElement) {
+            botonReiniciar.disabled = false;
+        }
     }
 }
 
-function handleClick(){
+function mePlanto(puntuacionUsuario : number){
+    let mensaje = "";
+    if(puntuacionUsuario <= 4){
+        mensaje = "Has sido muy conservador";
+    } else if (puntuacionUsuario > 4 && puntuacionUsuario < 6) {
+        mensaje = "Te ha entrado el canguelo, eh?";
+    } else if (puntuacionUsuario >= 6 && puntuacionUsuario <= 7) {
+        mensaje = "Casi, casi...";
+    } else if (puntuacionUsuario === 7.5){
+        mensaje = "¡Lo has clavado! ¡Enhorabuena!";
+    }
+
+    let elementoMsj = document.getElementById("msj");
+    if(elementoMsj && elementoMsj instanceof HTMLDivElement){
+        elementoMsj.innerHTML = mensaje;
+    }
+
+    const botonMePlanto = document.getElementById("mePlanto");
+    if(botonMePlanto && botonMePlanto instanceof HTMLButtonElement){
+        botonMePlanto.disabled = true;
+    }
+
+    const botonReiniciar = document.getElementById("reiniciar");
+    if (botonReiniciar && botonReiniciar instanceof HTMLButtonElement) {
+        botonReiniciar.disabled = false;
+    }
+}
+
+function reiniciar(){
+    location.reload();
+}
+
+
+function handleClickCarta(){
     let carta = dameCarta();
     console.log(carta); // Comprobacion carta
     muestraCarta(carta);
     puntuacionUsuario = sumarCartas(carta, puntuacionUsuario);
     muestraPuntuacion();
-    gameOver(puntuacionUsuario);
-    
+    gameOver(puntuacionUsuario);    
+}
+
+function handleClickPlanto(){
+    mePlanto(puntuacionUsuario);
+    const botonPedir = document.getElementById("dameCarta");
+    if(botonPedir && botonPedir instanceof HTMLButtonElement){
+        botonPedir.disabled = true;
+    }
+}
+
+function handleReiniciar(){
+    reiniciar();
 }
 
 const botonPedir = document.getElementById("dameCarta");
 if(botonPedir && botonPedir instanceof HTMLButtonElement){
-    botonPedir.addEventListener("click", handleClick);
+    botonPedir.addEventListener("click", handleClickCarta);
+}
+
+const botonMePlanto = document.getElementById("mePlanto");
+if(botonMePlanto && botonMePlanto instanceof HTMLButtonElement){
+    botonMePlanto.addEventListener("click", handleClickPlanto);
+}
+
+const botonReiniciar = document.getElementById("reiniciar");
+if(botonReiniciar && botonReiniciar instanceof HTMLButtonElement){
+    botonReiniciar.addEventListener("click", handleReiniciar);
 }

@@ -74,6 +74,10 @@ h1 {
   color: #888;
 }
 
+#puntos-container{
+  padding: 20px;
+}
+
 button {
   border-radius: 8px;
   border: 1px solid transparent;
