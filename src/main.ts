@@ -31,9 +31,10 @@ function habilitarBoton(boton : HTMLButtonElement){
     }
 }
 
-document.addEventListener("DOMContentLoaded", muestraPuntuacion);
 
 document.addEventListener("DOMContentLoaded", ()=> {
+    muestraPuntuacion();
+
     const botonReiniciar = document.getElementById("reiniciar") as HTMLButtonElement;
     const botonRevelar = document.getElementById("revelaCarta") as HTMLButtonElement;
 
@@ -63,53 +64,65 @@ function dameCarta(){
 
 function muestraCarta(carta : number){
     let imagen = "";
-    
+    let alt = "";
+
     switch(carta){
         case AS:
             carta = 1,
-            imagen = "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/1_as-copas.jpg"
+            imagen = "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/1_as-copas.jpg",
+            alt = "As de copas"
             break;
         case DOS:
             imagen = "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/2_dos-copas.jpg",
-            carta = 2
+            carta = 2,
+            alt = "Dos de copas"
             break;
         case TRES:
             imagen = "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/3_tres-copas.jpg",
-            carta = 3
+            carta = 3,
+            alt = "Tres de copas"
             break;
         case CUATRO:
             imagen = "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/4_cuatro-copas.jpg",
-            carta = 4
+            carta = 4,
+            alt = "Cuatro de copas"
             break;
         case CINCO:
             imagen = "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/5_cinco-copas.jpg",
-            carta = 5
+            carta = 5,
+            alt = "Cinco de copas"
             break;
         case SEIS:
             imagen = "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/6_seis-copas.jpg",
-            carta = 6
+            carta = 6,
+            alt = "Seis de copas"
             break;
         case SIETE:
             imagen = "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/7_siete-copas.jpg",
-            carta = 7
+            carta = 7,
+            alt = "Siete de copas"
             break;
         case SOTA:
             imagen = "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/10_sota-copas.jpg",
-            carta = 10
+            carta = 10,
+            alt = "Sota de copas"
             break;
         case CABALLO:
             imagen = "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/11_caballo-copas.jpg",
-            carta = 11
+            carta = 11,
+            alt = "Caballo de copas"
             break;
         case REY:
             imagen = "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/12_rey-copas.jpg",
-            carta = 12
+            carta = 12,
+            alt = "Rey de copas"
             break;
     }
 
     let imagenCarta = document.getElementById("carta");
     if(imagenCarta && imagenCarta instanceof HTMLImageElement){
         imagenCarta.src = imagen;
+        imagenCarta.alt = alt;
     }
 
 }
@@ -164,7 +177,6 @@ function mePlanto(puntuacionUsuario : number){
     const botonRevelar = document.getElementById("revelaCarta") as HTMLButtonElement;
     habilitarBoton(botonRevelar);
 }
-
 
 function handleClickCarta(){
     let carta = dameCarta();
