@@ -19,18 +19,27 @@ function muestraPuntuacion () {
     } 
 }
 
+function deshabilitarBoton(boton : HTMLButtonElement){
+    if (boton instanceof HTMLButtonElement) {
+        boton.disabled = true;
+    }
+}
+
+function habilitarBoton(boton : HTMLButtonElement){
+    if (boton instanceof HTMLButtonElement) {
+        boton.disabled = false;
+    }
+}
+
 document.addEventListener("DOMContentLoaded", muestraPuntuacion);
 
 document.addEventListener("DOMContentLoaded", ()=> {
-    const botonReiniciar = document.getElementById("reiniciar");
-    if (botonReiniciar && botonReiniciar instanceof HTMLButtonElement) {
-        botonReiniciar.disabled = true;
-    }
+    const botonReiniciar = document.getElementById("reiniciar") as HTMLButtonElement;
+    const botonRevelar = document.getElementById("revelaCarta") as HTMLButtonElement;
 
-    const botonRevelar = document.getElementById("revelaCarta");
-    if (botonRevelar && botonRevelar instanceof HTMLButtonElement) {
-        botonRevelar.disabled = true;
-    }
+    deshabilitarBoton(botonReiniciar);
+    deshabilitarBoton(botonRevelar);
+
 });
 
 function generarNumRandom (min : number, max : number) : number{
@@ -79,7 +88,7 @@ function muestraCarta(carta : number){
         case SEIS:
             imagen = "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/6_seis-copas.jpg",
             carta = 6
-            carta;
+            break;
         case SIETE:
             imagen = "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/7_siete-copas.jpg",
             carta = 7
@@ -120,18 +129,12 @@ function gameOver(puntuacionUsuario : number){
         if (puntuacion && puntuacion instanceof HTMLDivElement) {
             puntuacion.innerHTML = "Has perdido";
         } 
-        const botonPedir = document.getElementById("dameCarta");
-        if(botonPedir && botonPedir instanceof HTMLButtonElement){
-            botonPedir.disabled = true;
-        }
-        const botonMePlanto = document.getElementById("mePlanto");
-        if(botonMePlanto && botonMePlanto instanceof HTMLButtonElement){
-            botonMePlanto.disabled = true;
-        }
-        const botonReiniciar = document.getElementById("reiniciar");
-        if (botonReiniciar && botonReiniciar instanceof HTMLButtonElement) {
-            botonReiniciar.disabled = false;
-        }
+        const botonPedir = document.getElementById("dameCarta") as HTMLButtonElement;
+        deshabilitarBoton(botonPedir);
+        const botonMePlanto = document.getElementById("mePlanto") as HTMLButtonElement;
+        deshabilitarBoton(botonMePlanto);
+        const botonReiniciar = document.getElementById("reiniciar") as HTMLButtonElement;
+        habilitarBoton(botonReiniciar);
     }
 }
 
@@ -152,20 +155,14 @@ function mePlanto(puntuacionUsuario : number){
         elementoMsj.innerHTML = mensaje;
     }
 
-    const botonMePlanto = document.getElementById("mePlanto");
-    if(botonMePlanto && botonMePlanto instanceof HTMLButtonElement){
-        botonMePlanto.disabled = true;
-    }
+    const botonMePlanto = document.getElementById("mePlanto") as HTMLButtonElement;
+    deshabilitarBoton(botonMePlanto);
 
-    const botonReiniciar = document.getElementById("reiniciar");
-    if (botonReiniciar && botonReiniciar instanceof HTMLButtonElement) {
-        botonReiniciar.disabled = false;
-    }
+    const botonReiniciar = document.getElementById("reiniciar") as HTMLButtonElement;
+    habilitarBoton(botonReiniciar);
 
-    const botonRevelar = document.getElementById("revelaCarta");
-    if (botonRevelar && botonRevelar instanceof HTMLButtonElement) {
-        botonRevelar.disabled = false;
-    }
+    const botonRevelar = document.getElementById("revelaCarta") as HTMLButtonElement;
+    habilitarBoton(botonRevelar);
 }
 
 
@@ -180,10 +177,8 @@ function handleClickCarta(){
 
 function handleClickPlanto(){
     mePlanto(puntuacionUsuario);
-    const botonPedir = document.getElementById("dameCarta");
-    if(botonPedir && botonPedir instanceof HTMLButtonElement){
-        botonPedir.disabled = true;
-    }
+    const botonPedir = document.getElementById("dameCarta") as HTMLButtonElement;
+    deshabilitarBoton(botonPedir);
 }
 
 function handleClickReiniciar(){
