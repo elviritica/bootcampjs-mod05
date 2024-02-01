@@ -26,6 +26,11 @@ document.addEventListener("DOMContentLoaded", ()=> {
     if (botonReiniciar && botonReiniciar instanceof HTMLButtonElement) {
         botonReiniciar.disabled = true;
     }
+
+    const botonRevelar = document.getElementById("revelaCarta");
+    if (botonRevelar && botonRevelar instanceof HTMLButtonElement) {
+        botonRevelar.disabled = true;
+    }
 });
 
 function generarNumRandom (min : number, max : number) : number{
@@ -156,10 +161,11 @@ function mePlanto(puntuacionUsuario : number){
     if (botonReiniciar && botonReiniciar instanceof HTMLButtonElement) {
         botonReiniciar.disabled = false;
     }
-}
 
-function reiniciar(){
-    location.reload();
+    const botonRevelar = document.getElementById("revelaCarta");
+    if (botonRevelar && botonRevelar instanceof HTMLButtonElement) {
+        botonRevelar.disabled = false;
+    }
 }
 
 
@@ -180,8 +186,16 @@ function handleClickPlanto(){
     }
 }
 
-function handleReiniciar(){
-    reiniciar();
+function handleClickReiniciar(){
+    location.reload();
+}
+
+function handleClickRevelarCarta(){
+    let cartaRevelada = 0;
+
+    cartaRevelada = dameCarta();
+    muestraCarta(cartaRevelada);
+
 }
 
 const botonPedir = document.getElementById("dameCarta");
@@ -196,5 +210,10 @@ if(botonMePlanto && botonMePlanto instanceof HTMLButtonElement){
 
 const botonReiniciar = document.getElementById("reiniciar");
 if(botonReiniciar && botonReiniciar instanceof HTMLButtonElement){
-    botonReiniciar.addEventListener("click", handleReiniciar);
+    botonReiniciar.addEventListener("click", handleClickReiniciar);
+}
+
+const botonRevelar = document.getElementById("revelaCarta");
+if(botonRevelar && botonRevelar instanceof HTMLButtonElement){
+    botonRevelar.addEventListener("click", handleClickRevelarCarta);
 }
