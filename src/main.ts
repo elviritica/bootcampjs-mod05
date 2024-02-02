@@ -11,6 +11,11 @@ const SOTA = 10;
 const CABALLO = 11;
 const REY = 12;
 
+const botonPedir = document.getElementById("dameCarta") as HTMLButtonElement;
+const botonMePlanto = document.getElementById("mePlanto")  as HTMLButtonElement;
+const botonReiniciar = document.getElementById("reiniciar")  as HTMLButtonElement;
+const botonRevelar = document.getElementById("revelaCarta")  as HTMLButtonElement;
+let elementoMsj = document.getElementById("msj") as HTMLDivElement;
 
 function muestraPuntuacion () {
     const puntuacion = document.getElementById("puntuacion");
@@ -20,23 +25,19 @@ function muestraPuntuacion () {
 }
 
 function deshabilitarBoton(boton : HTMLButtonElement){
-    if (boton instanceof HTMLButtonElement) {
+    if (boton && boton instanceof HTMLButtonElement) {
         boton.disabled = true;
     }
 }
 
 function habilitarBoton(boton : HTMLButtonElement){
-    if (boton instanceof HTMLButtonElement) {
+    if (boton && boton instanceof HTMLButtonElement) {
         boton.disabled = false;
     }
 }
 
-
 document.addEventListener("DOMContentLoaded", ()=> {
     muestraPuntuacion();
-
-    const botonReiniciar = document.getElementById("reiniciar") as HTMLButtonElement;
-    const botonRevelar = document.getElementById("revelaCarta") as HTMLButtonElement;
 
     deshabilitarBoton(botonReiniciar);
     deshabilitarBoton(botonRevelar);
@@ -138,15 +139,22 @@ function sumarCartas(carta:number, puntuacionUsuario: number){
 
 function gameOver(puntuacionUsuario : number){
     if(puntuacionUsuario > 7.5){
-        const puntuacion = document.getElementById("puntuacion");
-        if (puntuacion && puntuacion instanceof HTMLDivElement) {
-            puntuacion.innerHTML = "Has perdido";
-        } 
-        const botonPedir = document.getElementById("dameCarta") as HTMLButtonElement;
+        if(elementoMsj && elementoMsj instanceof HTMLDivElement){
+            elementoMsj.innerHTML = "Has perdido";
+        }
         deshabilitarBoton(botonPedir);
-        const botonMePlanto = document.getElementById("mePlanto") as HTMLButtonElement;
         deshabilitarBoton(botonMePlanto);
-        const botonReiniciar = document.getElementById("reiniciar") as HTMLButtonElement;
+        habilitarBoton(botonReiniciar);
+    }
+}
+
+function hasGanado(puntuacionUsuario : number){
+    if (puntuacionUsuario === 7.5) {
+        if(elementoMsj && elementoMsj instanceof HTMLDivElement){
+            elementoMsj.innerHTML = "Has ganado";
+        }
+        deshabilitarBoton(botonPedir);
+        deshabilitarBoton(botonMePlanto);
         habilitarBoton(botonReiniciar);
     }
 }
@@ -163,33 +171,27 @@ function mePlanto(puntuacionUsuario : number){
         mensaje = "¡Lo has clavado! ¡Enhorabuena!";
     }
 
-    let elementoMsj = document.getElementById("msj");
     if(elementoMsj && elementoMsj instanceof HTMLDivElement){
         elementoMsj.innerHTML = mensaje;
     }
 
-    const botonMePlanto = document.getElementById("mePlanto") as HTMLButtonElement;
     deshabilitarBoton(botonMePlanto);
-
-    const botonReiniciar = document.getElementById("reiniciar") as HTMLButtonElement;
     habilitarBoton(botonReiniciar);
-
-    const botonRevelar = document.getElementById("revelaCarta") as HTMLButtonElement;
     habilitarBoton(botonRevelar);
 }
 
 function handleClickCarta(){
     let carta = dameCarta();
-    console.log(carta); // Comprobacion carta
     muestraCarta(carta);
     puntuacionUsuario = sumarCartas(carta, puntuacionUsuario);
     muestraPuntuacion();
-    gameOver(puntuacionUsuario);    
+    hasGanado(puntuacionUsuario);
+    gameOver(puntuacionUsuario);
 }
 
 function handleClickPlanto(){
     mePlanto(puntuacionUsuario);
-    const botonPedir = document.getElementById("dameCarta") as HTMLButtonElement;
+    
     deshabilitarBoton(botonPedir);
 }
 
@@ -202,25 +204,29 @@ function handleClickRevelarCarta(){
 
     cartaRevelada = dameCarta();
     muestraCarta(cartaRevelada);
+    puntuacionUsuario = sumarCartas(cartaRevelada, puntuacionUsuario);
+    muestraPuntuacion();
+
+    deshabilitarBoton(botonRevelar);
+    
+    if(elementoMsj && elementoMsj instanceof HTMLDivElement){
+        elementoMsj.innerHTML = `Si no te hubieses plantado habrías conseguido una puntuación de ${puntuacionUsuario}`;
+    }
 
 }
 
-const botonPedir = document.getElementById("dameCarta");
 if(botonPedir && botonPedir instanceof HTMLButtonElement){
     botonPedir.addEventListener("click", handleClickCarta);
 }
 
-const botonMePlanto = document.getElementById("mePlanto");
 if(botonMePlanto && botonMePlanto instanceof HTMLButtonElement){
     botonMePlanto.addEventListener("click", handleClickPlanto);
 }
 
-const botonReiniciar = document.getElementById("reiniciar");
 if(botonReiniciar && botonReiniciar instanceof HTMLButtonElement){
     botonReiniciar.addEventListener("click", handleClickReiniciar);
 }
 
-const botonRevelar = document.getElementById("revelaCarta");
 if(botonRevelar && botonRevelar instanceof HTMLButtonElement){
     botonRevelar.addEventListener("click", handleClickRevelarCarta);
 }
